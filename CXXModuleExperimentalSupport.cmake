@@ -1,0 +1,18 @@
+# Ack use of experimental features
+set(CMAKE_EXPERIMENTAL_CXX_MODULE_CMAKE_API "3c375311-a3c9-4396-a187-3227ef642046")
+
+# Experimental Module support
+set(CMAKE_EXPERIMENTAL_CXX_MODULE_DYNDEP 1)
+
+# This setup is MSVC-only for now
+if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+    string(CONCAT CMAKE_EXPERIMENTAL_CXX_SCANDEP_SOURCE
+        "<CMAKE_CXX_COMPILER> <DEFINES> <INCLUDES> <FLAGS> <SOURCE> /nologo /TP"
+        " /showIncludes /scanDependencies <DYNDEP_FILE>"
+        " /Fo<OBJECT>")
+
+    set(CMAKE_EXPERIMENTAL_CXX_SCANDEP_DEPFILE_FORMAT "msvc")
+    set(CMAKE_EXPERIMENTAL_CXX_MODULE_MAP_FORMAT "msvc")
+    set(CMAKE_EXPERIMENTAL_CXX_MODULE_MAP_FLAG "@<MODULE_MAP_FILE>")
+endif()
+

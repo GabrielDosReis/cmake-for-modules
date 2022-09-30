@@ -1,0 +1,3 @@
+# Boilerplate for Activating CMake Experimental Support for C++ Modules
+
+This repository contains a [CMake](https://github.com/Kitware/CMake) script boilerplate for activating CMake's work-in-progress support for C++ Modules (requiring C++20 or later).  I put it here so I can conveniently reference it (via `git subtree`) in git repos.  It comes with abolutely no warrantee whatsover.  The original source is CMake's in-development documentation.  Special thanks to [Ben Boeckel](https://github.com/mathstuf/) for helping me with the right set of incantations.  All bugs and errors are mine.
