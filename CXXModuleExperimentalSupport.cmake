@@ -1,18 +1,31 @@
-# Ack use of experimental features
-set(CMAKE_EXPERIMENTAL_CXX_MODULE_CMAKE_API "3c375311-a3c9-4396-a187-3227ef642046")
+# Ack use of experimental features in CMake 3.27
+set(CMAKE_EXPERIMENTAL_CXX_MODULE_CMAKE_API "aa1f7df0-828a-4fcd-9afc-2dc80491aca7")
 
-# Experimental Module support
-set(CMAKE_EXPERIMENTAL_CXX_MODULE_DYNDEP 1)
-
-# This setup is MSVC-only for now
+# This setup is MSVC-only for now, for `std` and `std.compat` standard C++ modules.
+# These Standard Library Modules are available only in C++23 and up.  Make sure you've
+# the most recent preview of the Visual Studio C++IDE or MSVC toolset.
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
-    string(CONCAT CMAKE_EXPERIMENTAL_CXX_SCANDEP_SOURCE
-        "<CMAKE_CXX_COMPILER> <DEFINES> <INCLUDES> <FLAGS> <SOURCE> /nologo /TP"
-        " /showIncludes /scanDependencies <DYNDEP_FILE>"
-        " /Fo<OBJECT>")
+    # Set up location for standard library modules
+    find_path(STD_INCLUDE_DIR "vector")
+    if (NOT DEFINED STD_INCLUDE_DIR)
+        message(FATAL_ERROR "Could not find header file <vector>")
+    endif()
+    cmake_path(GET STD_INCLUDE_DIR PARENT_PATH STD_INCLUDE_PARENT_DIR)
+    set(STD_MODULE_DIR "${STD_INCLUDE_PARENT_DIR}/modules")
+    message("Standard Library Modules directory set to: ${STD_MODULE_DIR}")
 
-    set(CMAKE_EXPERIMENTAL_CXX_SCANDEP_DEPFILE_FORMAT "msvc")
-    set(CMAKE_EXPERIMENTAL_CXX_MODULE_MAP_FORMAT "msvc")
-    set(CMAKE_EXPERIMENTAL_CXX_MODULE_MAP_FLAG "@<MODULE_MAP_FILE>")
+    # Define the C++ Standard Library Modules target based on installed C++ modules
+    # interface source files.  Explicitly link your CMake target to this when using
+    # these modules in your project.  Ideally, this target should be conceptually set up
+    # automatically by the build system when it detects that you're using C++23 and up.
+    add_library(cxx-std-modules STATIC)
+    target_sources(cxx-std-modules
+        PUBLIC                                          # Why can't this just be INTERFACE?
+            FILE_SET CXX_MODULES
+            BASE_DIRS ${STD_MODULE_DIR}
+            FILES
+                ${STD_MODULE_DIR}/std.ixx
+                ${STD_MODULE_DIR}/std.compat.ixx
+    )
 endif()
 
