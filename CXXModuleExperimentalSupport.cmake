@@ -1,6 +1,3 @@
-# Ack use of experimental features in CMake 3.27.7
-set(CMAKE_EXPERIMENTAL_CXX_MODULE_CMAKE_API "aa1f7df0-828a-4fcd-9afc-2dc80491aca7")
-
 # This setup is MSVC-only for now, for `std` and `std.compat` standard C++ modules.
 # These Standard Library Modules are available only in C++23 and up.  Make sure you've
 # the most recent preview of the Visual Studio C++IDE or MSVC toolset.
